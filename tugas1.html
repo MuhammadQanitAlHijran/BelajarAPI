@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Contoh AJAX dengan jQuery</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$("#load-data-btn").click(function() {
+				$.ajax({
+					url: "https://randomuser.me/api/?results=10",
+					method: "GET",
+					success: function(response) {
+						// Memanggil fungsi untuk menampilkan data ke tabel
+						displayData(response.results);
+					},
+					error: function() {
+						alert("Gagal memuat data");
+					}
+				});
+			});
+
+			function displayData(users) {
+				// Membuat variabel untuk menyimpan HTML tabel
+				var tableHtml = "<tr><th>Foto</th><th>Nama Depan</th><th>Nama Belakang</th><th>Email</th><th>Alamat</th><th>Kota</th><th>Negara</th></tr>";
+				// Looping data pengguna dan menambahkan baris baru ke tabel
+				$.each(users, function(index, user) {
+					var firstName = user.name.first;
+					var lastName = user.name.last;
+					var email = user.email;
+					var address = user.location.street.name + " " + user.location.street.number + ", " + user.location.city;
+					var city = user.location.city;
+					var country = user.location.country;
+					var picture = user.picture.thumbnail;
+					tableHtml += "<tr><td><img src='" + picture + "'></td><td>" + firstName + "</td><td>" + lastName + "</td><td>" + email + "</td><td>" + address + "</td><td>" + city + "</td><td>" + country + "</td></tr>";
+				});
+				// Menambahkan HTML tabel ke elemen dengan ID "user-table"
+				$("#user-table").html(tableHtml);
+			}
+		});
+	</script>
+</head>
+<body>
+	<h1>Tugas jQuery</h1>
+	<p>Klik tombol di bawah ini untuk memuat data:</p>
+	<button id="load-data-btn">Load Data</button>
+	<table id="user-table" style="border = 1px"></table>
+</body>
+</html>
